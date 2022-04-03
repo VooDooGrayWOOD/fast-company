@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from "react";
+import Users from "./components/users";
+import SearchStatus from "./components/searchStatus";
+import API from "./api/index";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [users, setUsers] = useState(API.users.fetchAll());
+    
+    const handleDelete = (userId) => {
+        setUsers(users.filter(user => user._id !== userId))
+    };
+
+    const handleToggleBookMark = (id) => {
+        const newUsers = [...users];
+        let usersIndex = users.findIndex(user => user._id === id);
+        const status = users[usersIndex].bookmark === false ? true : false;
+        newUsers[usersIndex].bookmark = status;
+        setUsers(newUsers);
+    }
+
+    return (
+        <>
+            <SearchStatus length={users.length}/>
+            <table className="table">
+            <thead>
+                <tr>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Качества</th>
+                    <th scope="col">Профессия</th>
+                    <th scope="col">Встретился, раз</th>
+                    <th scope="col">Избранное</th>
+                    <th scope="col">Оценка</th>
+                </tr>
+            </thead>
+                <tbody>
+                    <Users users={users} onToggleBookMark={handleToggleBookMark} onDelete={handleDelete} />
+                </tbody>
+            </table>
+        </>
+    );
+};
 
 export default App;
