@@ -12,8 +12,8 @@ const App = () => {
 
     const handleToggleBookMark = (id) => {
         const newUsers = [...users];
-        let usersIndex = users.findIndex((user) => user._id === id);
-        const status = users[usersIndex].bookmark === false ? true : false;
+        const usersIndex = users.findIndex((user) => user._id === id);
+        const status = users[usersIndex].bookmark !== false;
         newUsers[usersIndex].bookmark = status;
         setUsers(newUsers);
     };
