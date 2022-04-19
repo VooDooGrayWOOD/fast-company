@@ -20,7 +20,12 @@ module.exports = {
             { anonymous: "always", named: "never" }
         ],
         quotes: ["error", "double", { allowTemplateLiterals: true }],
-        "multiline-ternary": ["error", "never"],
+        "multiline-ternary": ["error", "always-multiline"],
+        "operator-linebreak": [
+            "error",
+            "after",
+            { overrides: { "?": "before", ":": "before" } }
+        ],
         "no-unneeded-ternary": ["error", { defaultAssignment: true }]
     }
 };
