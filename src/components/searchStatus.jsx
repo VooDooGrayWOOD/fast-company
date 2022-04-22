@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const SearchStatus = ({ length }) => {
-    return length === 0 ? (<h2>
+    return length === 0 ? (
+        <h2>
             <span className="badge bg-danger">
                 {"Никто с тобой не тусанет"}
             </span>

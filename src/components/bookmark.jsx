@@ -7,7 +7,8 @@ const BookMark = ({ status, ...rest }) => {
     return (
         <div className="d-grid gap-2 col-4 mx-auto">
             {
-                <button {...rest}
+                <button
+                    {...rest}
                     className={`btn btn-outline-success btn-sm bi bi-clipboard-heart${result}`}
                 ></button>
             }

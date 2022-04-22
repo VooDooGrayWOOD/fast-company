@@ -13,9 +13,11 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
         }
     };
 
-    const status = selectedSort.order === "asc" ? "up-fill" : "down-fill";
-    // className={"bi bi-caret-" + (status)}
-    console.log(status);
+    const renderSortIconCarret = () => {
+        return selectedSort.order === "asc"
+            ? "bi bi-caret-up-fill"
+            : "bi bi-caret-down-fill";
+    };
 
     return (
         <thead>
@@ -32,9 +34,11 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                         scope="col"
                     >
                         {columns[column].name}
+                        {selectedSort.path === columns[column].path
+                            ? <i className={renderSortIconCarret()} />
+                            : null}
                     </th>
                 ))}
-
                 {/* <th scope="col">Качества</th>
                 <th onClick={() => handleSort("profession.name")} scope="col">
                     Профессия
