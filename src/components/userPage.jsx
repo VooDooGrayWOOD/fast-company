@@ -1,19 +1,26 @@
-import React from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import API from '../api/index'
 
-const UserPage = ({ id, users }) => {
+const UserPage = () => {
     const history = useHistory()
-    const getUserById = (id) => {
-        return users.find((user) => user.id.toString() === id)
-    }
+    const [user, setUser] = useState()
+    const params = useParams()
+    const { usersId } = params
+
+    useEffect(() => {
+        API.users.getById(usersId).then((data) => setUser(data))
+    })
+    console.log(user)
     const handleAllUsers = () => {
         history.replace('/users')
     }
-    const user = getUserById(id)
+
     return (
         <>
-            <h2>{user ? user.label : `Loading...`}</h2>
+            {user ? <h2>{user.name}</h2> : `Loading...`}
             <button
+                className="btn btn-outline-success btn-sm m-2"
                 onClick={() => {
                     handleAllUsers()
                 }}

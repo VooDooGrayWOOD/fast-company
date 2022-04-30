@@ -5,10 +5,10 @@ import api from '../api'
 import PropTypes from 'prop-types'
 import GroupList from './groupList'
 import SearchStatus from './searchStatus'
-import UsersList from './usersList'
 import UserPage from './userPage'
 import { useParams } from 'react-router-dom'
 import _ from 'lodash'
+import UsersTable from './usersTable'
 
 const Users = () => {
     const pageSize = 8
@@ -102,12 +102,11 @@ const Users = () => {
                     <SearchStatus length={count} />
 
                     {userId ? (
-                        <UserPage users={users} id={userId} />
+                        <UserPage users={users} />
                     ) : (
                         <>
                             {count > 0 && (
-                                <UsersList
-                                    // users={users}
+                                <UsersTable
                                     users={userCrop}
                                     onSort={HandleSort}
                                     selectedSort={sortBy}
