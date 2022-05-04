@@ -9,6 +9,7 @@ import UserPage from './userPage'
 import { useParams } from 'react-router-dom'
 import _ from 'lodash'
 import UsersTable from './usersTable'
+import UserSearch from './userSearch'
 
 const Users = () => {
     const pageSize = 8
@@ -100,7 +101,7 @@ const Users = () => {
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
-
+                    <UserSearch users={users} />
                     {userId ? (
                         <UserPage users={users} />
                     ) : (
