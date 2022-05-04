@@ -1,5 +1,5 @@
 import React from 'react'
-import Users from './components/users'
+import Users from './layouts/users'
 import NavBar from './components/navBar'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Home from './layouts/home'
@@ -15,7 +15,7 @@ const App = () => {
                 <Route path="/users" component={Users} />
                 <Route path="/login" component={Login} />
                 <Route path="/" exact component={Home} />
-                <Redirect from="/admin" to="/users" />
+                <Redirect to="/" />
             </Switch>
         </div>
     )
