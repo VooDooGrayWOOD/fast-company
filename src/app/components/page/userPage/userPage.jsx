@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import API from '../api/index'
+import API from '../../../api'
 import PropTypes from 'prop-types'
-import QualitiesList from './qualitiesList'
+import Qualities from '../../ui/qualities'
 
 const UserPage = () => {
     const history = useHistory()
@@ -12,8 +12,8 @@ const UserPage = () => {
 
     useEffect(() => {
         API.users.getById(usersId).then((data) => setUser(data))
-    })
-    console.log(user)
+    }, [])
+
     const handleAllUsers = () => {
         history.replace('/users')
     }
@@ -23,7 +23,7 @@ const UserPage = () => {
             <div>
                 <h1> {user.name}</h1>
                 <h2>Профессия: {user.profession.name}</h2>
-                <QualitiesList qualities={user.qualities} />
+                <Qualities qualities={user.qualities} />
                 <p>completedMeetings: {user.completedMeetings}</p>
                 <h2>Rate: {user.rate}</h2>
                 <button
@@ -41,7 +41,7 @@ const UserPage = () => {
 }
 
 UserPage.propTypes = {
-    userId: PropTypes.string.isRequired
+    userId: PropTypes.string
 }
 
 export default UserPage
