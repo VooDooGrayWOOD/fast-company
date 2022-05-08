@@ -5,7 +5,7 @@ import Pagination from './pagination'
 import api from '../api'
 import GroupList from './groupList'
 import SearchStatus from './searchStatus'
-import UserTable from './usersTable'
+import UsersTable from './usersTable'
 import _ from 'lodash'
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1)
@@ -14,13 +14,29 @@ const UsersList = () => {
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
     const pageSize = 8
 
+    const [value, setValue] = useState({ search: '' })
+
     const [users, setUsers] = useState()
+
+    const handleChange = ({ target }) => {
+        setValue((prevState) => ({
+            ...prevState,
+            [target.name]: target.value
+        }))
+        if (!value.search) {
+            setSelectedProf()
+            setCurrentPage(1)
+        }
+    }
+
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data))
     }, [])
+
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId))
     }
+
     const handleToggleBookMark = (id) => {
         const newArray = users.map((user) => {
             if (user._id === id) {
@@ -41,6 +57,7 @@ const UsersList = () => {
 
     const handleProfessionSelect = (item) => {
         setSelectedProf(item)
+        value.search = ''
     }
 
     const handlePageChange = (pageIndex) => {
@@ -59,13 +76,20 @@ const UsersList = () => {
               )
             : users
 
-        const count = filteredUsers.length
+        const filteredUsersName = filteredUsers.filter((user) => {
+            return user.name.toLowerCase().includes(value.search.toLowerCase())
+        })
+        // console.log(filteredUsersName)
+
+        const count = filteredUsersName.length
+
         const sortedUsers = _.orderBy(
-            filteredUsers,
+            filteredUsersName,
             [sortBy.path],
             [sortBy.order]
         )
         const usersCrop = paginate(sortedUsers, currentPage, pageSize)
+
         const clearFilter = () => {
             setSelectedProf()
         }
@@ -90,8 +114,17 @@ const UsersList = () => {
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
+                    <form action="">
+                        <input
+                            name="search"
+                            value={value.search}
+                            placeholder="Search..."
+                            className="w-100 mx-auto"
+                            onChange={handleChange}
+                        />
+                    </form>
                     {count > 0 && (
-                        <UserTable
+                        <UsersTable
                             users={usersCrop}
                             onSort={handleSort}
                             selectedSort={sortBy}
