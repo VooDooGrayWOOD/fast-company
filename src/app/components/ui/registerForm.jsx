@@ -4,7 +4,7 @@ import TextField from '../common/form/textField'
 import api from '../../api'
 import SelectField from '../common/form/selectField'
 import RadioField from '../common/form/radioField'
-import MultiselectField from '../common/form/multiselectField'
+import MultiSelectField from '../common/form/multiSelectField'
 import CheckBoxField from '../common/form/checkBoxField'
 
 const RegisterForm = () => {
@@ -16,15 +16,49 @@ const RegisterForm = () => {
         qualities: [],
         licence: false
     })
-
-    const [qualities, setQualities] = useState({})
-
+    const [qualities, setQualities] = useState([])
+    const [professions, setProfession] = useState([])
     const [errors, setErrors] = useState({})
-    const [professions, setProfession] = useState()
+
+    const getProfessionById = (id) => {
+        for (const prof of professions) {
+            if (prof.value === id) {
+                return { _id: prof.value, name: prof.label }
+            }
+        }
+    }
+    const getQualities = (elements) => {
+        const qualitiesArray = []
+        for (const elem of elements) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality].value) {
+                    qualitiesArray.push({
+                        _id: qualities[quality].value,
+                        name: qualities[quality].label,
+                        color: qualities[quality].color
+                    })
+                }
+            }
+        }
+        return qualitiesArray
+    }
 
     useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfession(data))
-        api.qualities.fetchAll().then((data) => setQualities(data))
+        api.professions.fetchAll().then((data) => {
+            const professionsList = Object.keys(data).map((professionName) => ({
+                label: data[professionName].name,
+                value: data[professionName]._id
+            }))
+            setProfession(professionsList)
+        })
+        api.qualities.fetchAll().then((data) => {
+            const qualitiesList = Object.keys(data).map((optionName) => ({
+                value: data[optionName]._id,
+                label: data[optionName].name,
+                color: data[optionName].color
+            }))
+            setQualities(qualitiesList)
+        })
     }, [])
 
     const handleChange = (target) => {
@@ -33,27 +67,27 @@ const RegisterForm = () => {
             [target.name]: target.value
         }))
     }
-
     const validatorConfig = {
         email: {
             isRequired: {
                 message: 'Электронная почта обязательна для заполнения'
             },
-            isEmail: { message: 'Email введён не корректно' }
+            isEmail: {
+                message: 'Email введен некорректно'
+            }
         },
         password: {
             isRequired: {
                 message: 'Пароль обязателен для заполнения'
             },
             isCapitalSymbol: {
-                message: 'Пароль должен содеражать хотя бы одну заглавную букву'
+                message: 'Пароль должен содержать хотя бы одну заглавную букву'
             },
             isContainDigit: {
-                message: 'Пароль должен содеражать хотя бы одну цифру'
+                message: 'Пароль должен содержать хотя бы одно число'
             },
             min: {
-                message:
-                    'Пароль должен состоять минимум из 8 (восьми) символов',
+                message: 'Пароль должен состоять минимум из 8 символов',
                 value: 8
             }
         },
@@ -69,51 +103,52 @@ const RegisterForm = () => {
             }
         }
     }
-
     useEffect(() => {
         validate()
     }, [data])
-
     const validate = () => {
         const errors = validator(data, validatorConfig)
         setErrors(errors)
         return Object.keys(errors).length === 0
     }
-
     const isValid = Object.keys(errors).length === 0
 
     const handleSubmit = (e) => {
         e.preventDefault()
         const isValid = validate()
         if (!isValid) return
-        console.log(data)
+        const { profession, qualities } = data
+        console.log({
+            ...data,
+            profession: getProfessionById(profession),
+            qualities: getQualities(qualities)
+        })
     }
-
     return (
         <form onSubmit={handleSubmit}>
             <TextField
                 label="Электронная почта"
-                onChange={handleChange}
                 name="email"
                 value={data.email}
+                onChange={handleChange}
                 error={errors.email}
             />
             <TextField
                 label="Пароль"
                 type="password"
-                onChange={handleChange}
                 name="password"
                 value={data.password}
+                onChange={handleChange}
                 error={errors.password}
             />
             <SelectField
                 label="Выбери свою профессию"
-                options={professions}
-                name="professions"
                 defaultOption="Choose..."
-                error={errors.profession}
-                value={data.profession}
+                options={professions}
+                name="profession"
                 onChange={handleChange}
+                value={data.profession}
+                error={errors.profession}
             />
             <RadioField
                 options={[
@@ -126,7 +161,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 label="Выберите ваш пол"
             />
-            <MultiselectField
+            <MultiSelectField
                 options={qualities}
                 onChange={handleChange}
                 defaultValue={data.qualities}
@@ -142,9 +177,9 @@ const RegisterForm = () => {
                 Подтвердить <a>лицензионное соглашение</a>
             </CheckBoxField>
             <button
+                className="btn btn-primary w-100 mx-auto"
                 type="submit"
                 disabled={!isValid}
-                className="btn btn-primary w-100 mx-auto"
             >
                 Submit
             </button>

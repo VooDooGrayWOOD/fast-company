@@ -15,7 +15,7 @@ const UserPage = () => {
     }, [])
 
     const handleAllUsers = () => {
-        history.replace('/users')
+        history.replace(`/users/page/${usersId}/edit`)
     }
 
     if (user) {
@@ -31,7 +31,7 @@ const UserPage = () => {
                     className="btn btn-outline-success btn-sm m-2"
                 >
                     {' '}
-                    Все Пользователи
+                    Изменить
                 </button>
             </div>
         )
