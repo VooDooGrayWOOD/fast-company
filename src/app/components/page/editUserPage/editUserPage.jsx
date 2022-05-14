@@ -10,14 +10,37 @@ const EditUser = () => {
     const [data, setData] = useState({
         name: '',
         email: '',
-        professions: '',
+        profession: '',
         sex: 'male',
         qualities: []
     })
 
     const [qualities, setQualities] = useState({})
     const [errors, setErrors] = useState({})
-    const [professions, setProfession] = useState()
+    const [profession, setProfession] = useState()
+
+    const getProfessionById = (id) => {
+        for (const prof of profession) {
+            if (prof.value === id) {
+                return { _id: prof.value, name: prof.label };
+            }
+        }
+    };
+    const getQualities = (elements) => {
+        const qualitiesArray = [];
+        for (const elem of elements) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality].value) {
+                    qualitiesArray.push({
+                        _id: qualities[quality].value,
+                        name: qualities[quality].label,
+                        color: qualities[quality].color
+                    });
+                }
+            }
+        }
+        return qualitiesArray;
+    };
 
     useEffect(() => {
         api.professions.fetchAll().then((data) => {
@@ -44,13 +67,6 @@ const EditUser = () => {
         }))
     }
 
-    // const handleChangeProfession = (target) => {
-    //     setData((prevState) => ({
-    //         ...prevState,
-    //         [target.name]: target._id
-    //     }))
-    // }
-
     const validatorConfig = {
         name: {
             isRequired: {
@@ -63,7 +79,7 @@ const EditUser = () => {
             },
             isEmail: { message: 'Email введён не корректно' }
         },
-        professions: {
+        profession: {
             isRequired: {
                 message: 'Обязательно выберите вашу профессию'
             }
@@ -86,8 +102,15 @@ const EditUser = () => {
         e.preventDefault()
         const isValid = validate()
         if (!isValid) return
-        console.log(data)
+        // console.log(data)
+        const { profession, qualities } = data;
+        console.log({
+            ...data,
+            profession: getProfessionById(profession),
+            qualities: getQualities(qualities)
+        })
     }
+
     return (
         <div className="container mt-5">
             <div className="row">
@@ -109,11 +132,11 @@ const EditUser = () => {
                         />
                         <SelectField
                             label="Выбери свою профессию"
-                            options={professions}
-                            name="professions"
+                            options={profession}
+                            name="profession"
                             defaultOption="Choose..."
-                            error={errors.professions}
-                            value={data.professions}
+                            error={errors.profession}
+                            value={data.profession}
                             onChange={handleChange}
                         />
                         <RadioField
@@ -139,7 +162,7 @@ const EditUser = () => {
                             disabled={!isValid}
                             className="btn btn-primary w-100 mx-auto"
                         >
-                            Submit
+                            Обновить
                         </button>
                     </form>
                 </div>

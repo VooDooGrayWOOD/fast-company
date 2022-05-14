@@ -106,6 +106,7 @@ const RegisterForm = () => {
     useEffect(() => {
         validate()
     }, [data])
+
     const validate = () => {
         const errors = validator(data, validatorConfig)
         setErrors(errors)
