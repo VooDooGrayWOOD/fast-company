@@ -6,12 +6,13 @@ import MultiselectField from '../../common/form/multiSelectField'
 import { useHistory, useParams } from 'react-router-dom'
 import api from '../../../api'
 import { validator } from '../../../utils/validator'
+import BackHistoryButton from '../../common/backButton'
 
 const EditUser = () => {
     const history = useHistory()
     const params = useParams()
     const [isLoading, setIsLoading] = useState(false)
-    const { usersId } = params
+    const { userId } = params
     const [data, setData] = useState({
         name: '',
         email: '',
@@ -68,7 +69,7 @@ const EditUser = () => {
             }))
             setProfession(professionsList)
         })
-        api.users.getById(usersId).then(({ profession, qualities, ...data }) =>
+        api.users.getById(userId).then(({ profession, qualities, ...data }) =>
             setData((prevState) => ({
                 ...prevState,
                 ...data,
@@ -76,7 +77,7 @@ const EditUser = () => {
                 profession: profession._id
             }))
         )
-    }, [])
+    }, [userId])
 
     useEffect(() => {
         if (data._id) setIsLoading(false)
@@ -99,7 +100,7 @@ const EditUser = () => {
     }
     useEffect(() => {
         validate()
-    }, [data])
+    }, [])
 
     const validate = () => {
         const errors = validator(data, validatorConfig)
@@ -116,13 +117,13 @@ const EditUser = () => {
     }
 
     const handleAllUsers = () => {
-        history.replace(`/users/${usersId}`)
+        history.replace(`/users/${userId}`)
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         const { profession, qualities } = data
-        api.users.update(usersId, {
+        api.users.update(userId, {
             ...data,
             profession: getProfessionById(profession),
             qualities: getQualities(qualities)
@@ -132,6 +133,7 @@ const EditUser = () => {
 
     return (
         <div className="container mt-5">
+            <BackHistoryButton />
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
                     {!isLoading && Object.keys(profession).length > 0 ? (
