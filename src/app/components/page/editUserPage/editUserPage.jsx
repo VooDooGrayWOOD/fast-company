@@ -5,20 +5,24 @@ import RadioField from '../../common/form/radioField'
 import MultiselectField from '../../common/form/multiSelectField'
 import { useHistory, useParams } from 'react-router-dom'
 import api from '../../../api'
+import { validator } from '../../../utils/validator'
 
 const EditUser = () => {
     const history = useHistory()
     const params = useParams()
-
+    const [isLoading, setIsLoading] = useState(false)
     const { usersId } = params
     const [data, setData] = useState({
         name: '',
         email: '',
-        profession: ''
+        profession: '',
+        sex: 'male',
+        qualities: []
     })
 
-    const [qualities, setQualities] = useState({})
+    const [qualities, setQualities] = useState([])
     const [profession, setProfession] = useState([])
+    const [errors, setErrors] = useState({})
 
     const getProfessionById = (id) => {
         for (const prof of profession) {
@@ -48,6 +52,7 @@ const EditUser = () => {
     }
 
     useEffect(() => {
+        setIsLoading(true)
         api.qualities.fetchAll().then((data) => {
             const qualitiesList = Object.keys(data).map((optionName) => ({
                 label: data[optionName].name,
@@ -73,6 +78,36 @@ const EditUser = () => {
         )
     }, [])
 
+    useEffect(() => {
+        if (data._id) setIsLoading(false)
+    }, [data])
+
+    const validatorConfig = {
+        email: {
+            isRequired: {
+                message: 'Электронная почта обязательна для заполнения'
+            },
+            isEmail: {
+                message: 'Email введен некорректно'
+            }
+        },
+        name: {
+            isRequired: {
+                message: 'Введите ваше имя'
+            }
+        }
+    }
+    useEffect(() => {
+        validate()
+    }, [data])
+
+    const validate = () => {
+        const errors = validator(data, validatorConfig)
+        setErrors(errors)
+        return Object.keys(errors).length === 0
+    }
+    const isValid = Object.keys(errors).length === 0
+
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
@@ -81,7 +116,7 @@ const EditUser = () => {
     }
 
     const handleAllUsers = () => {
-        history.replace(`/users/page/${usersId}`)
+        history.replace(`/users/${usersId}`)
     }
 
     const handleSubmit = (e) => {
@@ -99,27 +134,30 @@ const EditUser = () => {
         <div className="container mt-5">
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    {Object.keys(profession).length > 0 ? (
+                    {!isLoading && Object.keys(profession).length > 0 ? (
                         <form onSubmit={handleSubmit}>
                             <TextField
                                 label="Имя"
                                 onChange={handleChange}
                                 name="name"
                                 value={data.name}
+                                error={errors.name}
                             />
                             <TextField
                                 label="Электронная почта"
                                 onChange={handleChange}
                                 name="email"
                                 value={data.email}
+                                error={errors.email}
                             />
                             <SelectField
                                 label="Выбери свою профессию"
                                 options={profession}
                                 name="profession"
                                 defaultOption="Choose..."
-                                defaultValue={data.profession}
+                                value={data.profession}
                                 onChange={handleChange}
+                                error={errors.profession}
                             />
                             <RadioField
                                 options={[
@@ -141,6 +179,7 @@ const EditUser = () => {
                             />
                             <button
                                 type="submit"
+                                disabled={!isValid}
                                 className="btn btn-primary w-100 mx-auto"
                             >
                                 Обновить

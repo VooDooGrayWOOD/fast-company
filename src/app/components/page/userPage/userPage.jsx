@@ -15,7 +15,7 @@ const UserPage = () => {
     }, [])
 
     const handleAllUsers = () => {
-        history.replace(`/users/page/${usersId}/edit`)
+        history.replace(`/users/${usersId}/edit`)
     }
 
     if (user) {
