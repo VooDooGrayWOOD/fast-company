@@ -4,7 +4,7 @@ import Comment from './comment'
 
 const CommentsList = ({ comments, onRemove }) => {
     return comments.map((comment) => (
-        <Comment key={comment._id} {...comment} onRemove={onRemove} />
+        <Comment key={comment._id} id={comment._id} {...comment} onRemove={onRemove} />
     ))
 }
 
