@@ -39,8 +39,8 @@ export const QualitiesProvider = ({ children }) => {
         setError(message)
     }
 
-    const getQuality = () => {
-        return qualities.map((q) => q._id)
+    const getQuality = (id) => {
+        return qualities.find((q) => q._id === id)
     }
 
     return (
