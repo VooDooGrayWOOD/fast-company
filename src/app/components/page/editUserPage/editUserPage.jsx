@@ -8,7 +8,7 @@ import api from '../../../api'
 import { validator } from '../../../utils/validator'
 import BackHistoryButton from '../../common/backButton'
 
-const EditUser = () => {
+const EditUserPage = () => {
     const history = useHistory()
     const params = useParams()
     const [isLoading, setIsLoading] = useState(false)
@@ -98,15 +98,17 @@ const EditUser = () => {
             }
         }
     }
-    useEffect(() => {
-        validate()
-    }, [])
 
     const validate = () => {
         const errors = validator(data, validatorConfig)
         setErrors(errors)
         return Object.keys(errors).length === 0
     }
+
+    useEffect(() => {
+        validate()
+    }, [data])
+
     const isValid = Object.keys(errors).length === 0
 
     const handleChange = (target) => {
@@ -127,7 +129,7 @@ const EditUser = () => {
             ...data,
             profession: getProfessionById(profession),
             qualities: getQualities(qualities)
-        })
+        }).then()
         handleAllUsers()
     }
 
@@ -196,4 +198,4 @@ const EditUser = () => {
     )
 }
 
-export default EditUser
+export default EditUserPage
