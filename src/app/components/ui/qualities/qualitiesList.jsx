@@ -11,6 +11,7 @@ const QualitiesList = ({ qualities }) => {
                     color={qual.color}
                     name={qual.name}
                     _id={qual._id}
+                    qualities={qualities}
                 />
             ))}
         </>
