@@ -1,8 +1,18 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import config from '../config.json'
+import configFile from '../config.json'
 
-axios.defaults.baseURL = config.apiEndPoint
+axios.defaults.baseURL = configFile.apiEndPoint
+
+axios.interceptors.request.use(
+    function (config) {
+        console.log(config.url)
+        return config
+    },
+    function (error) {
+        return Promise.reject(error)
+    }
+)
 
 axios.interceptors.response.use(
     (res) => res,
