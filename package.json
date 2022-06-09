@@ -10,6 +10,7 @@
         "bootstrap": "^5.1.0",
         "bootstrap-icons": "^1.8.1",
         "lodash": "^4.17.21",
+        "npm": "^8.12.1",
         "prop-types": "^15.8.1",
         "query-string": "^7.1.1",
         "react": "^17.0.2",
