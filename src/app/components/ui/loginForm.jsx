@@ -9,7 +9,7 @@ const LoginForm = () => {
     const history = useHistory()
     const [data, setData] = useState({ email: '', password: '', stayOn: false })
     const [errors, setErrors] = useState({})
-    const { signIn } = useAuth()
+    const { logIn } = useAuth()
 
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -60,8 +60,13 @@ const LoginForm = () => {
         const isValid = validate()
         if (!isValid) return
         try {
-            await signIn(data)
-            history.push('/')
+            await logIn(data)
+            console.log(history.location.state.from.pathname)
+            history.push(
+                history.location.state
+                    ? history.location.state.from.pathname
+                    : '/'
+            )
         } catch (error) {
             setErrors(error)
         }
