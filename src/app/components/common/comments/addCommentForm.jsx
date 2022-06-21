@@ -1,73 +1,49 @@
-import React, { useEffect, useState } from "react";
-import API from "../../../api";
-import SelectField from "../form/selectField";
-import TextAreaField from "../form/textAreaField";
-import { validator } from "../../../utils/validator";
-import PropTypes from "prop-types";
-const initialData = { userId: "", content: "" };
+import React, { useState } from 'react'
+import TextAreaField from '../form/textAreaField'
+import { validator } from '../../../utils/validator'
+import PropTypes from 'prop-types'
 
 const AddCommentForm = ({ onSubmit }) => {
-    const [data, setData] = useState(initialData);
-    const [users, setUsers] = useState({});
-    const [errors, setErrors] = useState({});
+    const [data, setData] = useState({})
+    const [errors, setErrors] = useState({})
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
-        }));
-    };
+        }))
+    }
     const validatorConfig = {
-        userId: {
-            isRequired: {
-                message: "Выберите от чьего имени вы хотите отправить сообщение"
-            }
-        },
         content: {
             isRequired: {
-                message: "Сообщение не может быть пустым"
+                message: 'Сообщение не может быть пустым'
             }
         }
-    };
+    }
 
     const validate = () => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-    useEffect(() => {
-        API.users.fetchAll().then(setUsers);
-    }, []);
+        const errors = validator(data, validatorConfig)
+        setErrors(errors)
+        return Object.keys(errors).length === 0
+    }
+
     const clearForm = () => {
-        setData(initialData);
-        setErrors({});
-    };
+        setData({})
+        setErrors({})
+    }
     const handleSubmit = (e) => {
-        e.preventDefault();
-        const isValid = validate();
-        if (!isValid) return;
-        onSubmit(data);
-        clearForm();
-    };
-    const arrayOfUsers =
-        users &&
-        Object.keys(users).map((userId) => ({
-            label: users[userId].name,
-            value: users[userId]._id
-        }));
+        e.preventDefault()
+        const isValid = validate()
+        if (!isValid) return
+        onSubmit(data)
+        clearForm()
+    }
+
     return (
         <div>
             <h2>New comment</h2>
             <form onSubmit={handleSubmit}>
-                <SelectField
-                    onChange={handleChange}
-                    options={arrayOfUsers}
-                    name="userId"
-                    value={data.userId}
-                    defaultOption="Выберите пользователя"
-                    error={errors.userId}
-                />
                 <TextAreaField
-                    value={data.content}
+                    value={data.content || ''}
                     onChange={handleChange}
                     name="content"
                     label="Сообщение"
@@ -78,11 +54,11 @@ const AddCommentForm = ({ onSubmit }) => {
                 </div>
             </form>
         </div>
-    );
-};
+    )
+}
 
 AddCommentForm.propTypes = {
     onSubmit: PropTypes.func
-};
+}
 
-export default AddCommentForm;
+export default AddCommentForm

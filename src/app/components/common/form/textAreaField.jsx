@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const TextField = ({ label, type, value, name, onChange, error }) => {
+const TextField = ({ label, value, name, onChange, error }) => {
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value })
     }
