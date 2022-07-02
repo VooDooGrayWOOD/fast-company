@@ -70,6 +70,7 @@ http.interceptors.response.use(
 
 const httpService = {
     get: http.get,
+    patch: http.patch,
     post: http.post,
     put: http.put,
     delete: http.delete
