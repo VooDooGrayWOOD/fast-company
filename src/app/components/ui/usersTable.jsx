@@ -1,13 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import BookMark from '../common/bookmark'
 import Qualities from './qualities'
 import Table from '../common/table/table'
 import { Link } from 'react-router-dom'
 import Profession from './profession'
 
-const UserTable = ({ users, onSort, selectedSort, onToggleBookMark }) => {
+const UserTable = ({
+    users,
+    onSort,
+    selectedSort,
+    onToggleBookMark,
+    ...rest
+}) => {
     const columns = {
         name: {
             path: 'name',
@@ -51,10 +56,10 @@ const UserTable = ({ users, onSort, selectedSort, onToggleBookMark }) => {
 }
 
 UserTable.propTypes = {
-    users: PropTypes.array.isRequired,
-    onSort: PropTypes.func.isRequired,
-    selectedSort: PropTypes.object.isRequired,
-    onToggleBookMark: PropTypes.func.isRequired
+    users: PropTypes.array,
+    onSort: PropTypes.func,
+    selectedSort: PropTypes.object,
+    onToggleBookMark: PropTypes.func
 }
 
 export default UserTable

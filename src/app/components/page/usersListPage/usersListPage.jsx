@@ -6,25 +6,25 @@ import GroupList from '../../common/groupList'
 import SearchStatus from '../../ui/searchStatus'
 import UserTable from '../../ui/usersTable'
 import _ from 'lodash'
-import { useUser } from '../../../hooks/useUsers'
-import { useProfessions } from '../../../hooks/useProfession'
-import { useAuth } from '../../../hooks/useAuth'
+import { useSelector } from 'react-redux'
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from '../../../store/professions'
+import { getCurrentUserId, getUsersList } from '../../../store/users'
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
-    const { currentUser } = useAuth()
-    const { isLoading: professionsLoading, professions } = useProfessions()
+    const currentUserId = useSelector(getCurrentUserId())
+    const professions = useSelector(getProfessions())
+    const isLoading = useSelector(getProfessionsLoadingStatus())
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedProf, setSelectedProf] = useState()
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
     const pageSize = 8
 
-    const { users } = useUser()
+    const users = useSelector(getUsersList())
 
-    const handleDelete = (userId) => {
-        // setUsers(users.filter((user) => user._id !== userId))
-        console.log(userId)
-    }
     const handleToggleBookMark = (id) => {
         const newArray = users.map((user) => {
             if (user._id === id) {
@@ -72,7 +72,7 @@ const UsersListPage = () => {
                           JSON.stringify(selectedProf)
                   )
                 : data
-            return filteredUsers.filter((u) => u._id !== currentUser._id)
+            return filteredUsers.filter((u) => u._id !== currentUserId._id)
         }
         const filteredUsers = filterUsers(users)
         const count = filteredUsers.length
@@ -88,7 +88,7 @@ const UsersListPage = () => {
 
         return (
             <div className="d-flex">
-                {professions && !professionsLoading && (
+                {professions && !isLoading && (
                     <div className="d-flex flex-column flex-shrink-0 p-3">
                         <GroupList
                             selectedItem={selectedProf}
@@ -118,7 +118,6 @@ const UsersListPage = () => {
                             users={usersCrop}
                             onSort={handleSort}
                             selectedSort={sortBy}
-                            onDelete={handleDelete}
                             onToggleBookMark={handleToggleBookMark}
                         />
                     )}

@@ -3,16 +3,21 @@ import { useParams } from 'react-router-dom'
 import EditUserPage from '../components/page/editUserPage'
 import UserPage from '../components/page/userPage'
 import UsersListPage from '../components/page/usersListPage'
-import UserProvider from '../hooks/useUsers'
+import { useSelector } from 'react-redux'
+import { getCurrentUserId, getDataStatus } from '../store/users'
+import UsersLoader from '../components/ui/hoc/usersLoader'
 
 const Users = () => {
     const params = useParams()
     const { userId, edit } = params
+    const dataStatus = useSelector(getDataStatus())
+    const currentUserId = useSelector(getCurrentUserId())
 
+    if (!dataStatus) return 'Loading...'
     return (
         <>
-            <UserProvider>
-                {userId ? (
+            <UsersLoader>
+                {userId === currentUserId ? (
                     edit ? (
                         <EditUserPage />
                     ) : (
@@ -21,7 +26,7 @@ const Users = () => {
                 ) : (
                     <UsersListPage />
                 )}
-            </UserProvider>
+            </UsersLoader>
         </>
     )
 }

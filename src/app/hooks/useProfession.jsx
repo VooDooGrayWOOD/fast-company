@@ -1,13 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import professionService from '../services/profession.service'
 import { toast } from 'react-toastify'
 
 const ProfessionContext = React.createContext()
-
-export const useProfessions = () => {
-    return useContext(ProfessionContext)
-}
 
 export const ProfessionProvider = ({ children }) => {
     const [isLoading, setLoading] = useState(true)
