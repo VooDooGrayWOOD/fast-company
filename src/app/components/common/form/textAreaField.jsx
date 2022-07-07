@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const TextField = ({ label, value, name, onChange, error }) => {
+const TextAreaField = ({ label, value, name, onChange, error }) => {
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value })
     }
@@ -26,10 +26,10 @@ const TextField = ({ label, value, name, onChange, error }) => {
         </div>
     )
 }
-TextField.defaultProps = {
+TextAreaField.defaultProps = {
     type: 'text'
 }
-TextField.propTypes = {
+TextAreaField.propTypes = {
     label: PropTypes.string,
     type: PropTypes.string,
     name: PropTypes.string,
@@ -38,4 +38,4 @@ TextField.propTypes = {
     error: PropTypes.string
 }
 
-export default TextField
+export default TextAreaField

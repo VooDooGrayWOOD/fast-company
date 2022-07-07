@@ -40,10 +40,10 @@ const {
 const createCommentsRequested = createAction('/users/createCommentsRequested')
 const createCommentsFailed = createAction('/users/createCommentsFailed')
 
-export const createComments = (userId) => async (dispatch) => {
+export const createComments = (data) => async (dispatch) => {
     dispatch(createCommentsRequested())
     try {
-        const { content } = await commentService.createComment(userId)
+        const { content } = await commentService.createComment(data)
         console.log(content)
         dispatch(commentsCreated(content))
     } catch (error) {
