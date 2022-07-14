@@ -46,6 +46,7 @@ const EditUserPage = () => {
             })
         )
     }
+
     function getQualitiesListByIds(qualitiesIds) {
         const qualitiesArray = []
         for (const qualId of qualitiesIds) {
@@ -58,6 +59,7 @@ const EditUserPage = () => {
         }
         return qualitiesArray
     }
+
     const transformData = (data) => {
         const result = getQualitiesListByIds(data).map((qual) => ({
             label: qual.name,
