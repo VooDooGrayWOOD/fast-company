@@ -46,38 +46,44 @@ const createCommentsRequested = createAction(
     '/comments/createCommentsRequested'
 )
 const createCommentsFailed = createAction('/comments/createCommentsFailed')
+const deleteCommentsFailed = createAction('/comments/deleteCommentsFailed')
 
-export const createComments = (payload) => async (dispatch, getState) => {
-    dispatch(createCommentsRequested())
-    try {
-        const comment = {
-            ...payload,
-            _id: nanoid(),
-            created_at: Date.now(),
-            userId: getCurrentUserId()(getState())
-        }
-        const { content } = await commentService.createComment(comment)
-        console.log(content)
-        dispatch(commentsCreated(content))
-    } catch (error) {
-        dispatch(createCommentsFailed(error.message))
-    }
-}
-
-export const deleteComment = (payload) => async (dispatch) => {
-    try {
-        const { content } = await commentService.removeComment(payload)
-        dispatch(commentRemove(content))
-    } catch (error) {}
-}
-
-export const loadCommentsList = (userId) => async (dispatch) => {
+export const loadCommentsList = (pageId) => async (dispatch) => {
     dispatch(commentsRequested())
     try {
-        const { content } = await commentService.getComments(userId)
+        const { content } = await commentService.getComments(pageId)
         dispatch(commentsReceived(content))
     } catch (error) {
         dispatch(commentsRequestFiled(error.message))
+    }
+}
+
+export const createComments =
+    (payload, userId) => async (dispatch, getState) => {
+        dispatch(createCommentsRequested())
+        try {
+            const comment = {
+                ...payload,
+                _id: nanoid(),
+                pageId: userId,
+                created_at: Date.now(),
+                userId: getCurrentUserId()(getState())
+            }
+            const { content } = await commentService.createComment(comment)
+            dispatch(commentsCreated(content))
+        } catch (error) {
+            dispatch(createCommentsFailed(error.message))
+        }
+    }
+
+export const deleteComment = (id) => async (dispatch) => {
+    try {
+        const { content } = await commentService.removeComment(id)
+        if (content === null) {
+            dispatch(commentRemove(id))
+        }
+    } catch (error) {
+        dispatch(deleteCommentsFailed(error.message))
     }
 }
 

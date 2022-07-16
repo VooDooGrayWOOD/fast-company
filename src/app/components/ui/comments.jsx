@@ -17,12 +17,12 @@ const Comments = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(loadCommentsList(userId))
-    }, [userId])
+    }, [userId, dispatch])
     const isLoading = useSelector(getCommentsLoadingStatus())
     const comments = useSelector(getComments())
 
     const handleSubmit = (data) => {
-        dispatch(createComments(data))
+        dispatch(createComments(data, userId))
     }
 
     const handleRemoveComment = (id) => {
