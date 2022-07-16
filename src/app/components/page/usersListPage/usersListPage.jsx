@@ -74,6 +74,7 @@ const UsersListPage = () => {
                 : data
             return filteredUsers.filter((u) => u._id !== currentUserId._id)
         }
+
         const filteredUsers = filterUsers(users)
         const count = filteredUsers.length
         const sortedUsers = _.orderBy(
