@@ -28,15 +28,15 @@ Next:
 
 <b>Sort by name, appointments, grades. Search by letters of the name, as well as sorting by profession.</b>
 
-<img src="../ScreenShots/fast-company.jpg">
+<img src="ScreenShots/fast-company.jpg">
 
 <b>Sending and deleting comments on the user's page.</b>
 
-<img src="../ScreenShots/fast-company2.jpg">
+<img src="ScreenShots/fast-company2.jpg">
 
 <b>Editing an authorized user.</b>
 
-<img src="../ScreenShots/fast-company3.jpg">
+<img src="ScreenShots/fast-company3.jpg">
 
 <b>As well as user registration and login.</b>
 
