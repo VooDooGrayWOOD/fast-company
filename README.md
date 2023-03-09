@@ -1,5 +1,13 @@
 <h2 align="center">My course project</h2>
 
+<h3 align="center"> Deploy -> https://fast-company.voodoograywood.ru </h3>
+
+On deploy use: 
+    
+    login: voo@mail.ru, 
+    pass: Test1234
+
+
 <p align="center">
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/javascript-colored.svg" width="36" height="36" alt="Javascript" /></a>
 <a href="https://reactjs.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/react-colored.svg" width="36" height="36" alt="React" /></a>
