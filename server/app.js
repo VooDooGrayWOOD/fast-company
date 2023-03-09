@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const config = require('config')
 const chalk = require('chalk')
+const path = require('path')
 const cors = require('cors')
 const initDatabase = require('./startUp/initDatabase')
 const routes = require('./routes')
@@ -17,7 +18,7 @@ app.use('/api', routes)
 
 // const PORT = config.get('port') ?? 8080
 
-const PORT = process.env.PORT || 9000
+const PORT = process.env.PORT || 9001
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.resolve(__dirname, '..', 'client', 'build')))
